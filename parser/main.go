@@ -34,8 +34,8 @@ func main() {
 	passB, _ := gopass.GetPasswdMasked()
 	pass := string(passB)
 
-	regStrFull := "\\* \\[[-_A-Za-z0-9\\/]+\\]\\(https:\\/\\/github\\.com\\/[-_A-Za-z]+\\/[-_A-Za-z]+\\/?\\)"
-	regLink := regexp.MustCompile("https:\\/\\/github\\.com\\/([-_A-Za-z]+\\/[-_A-Za-z]+)\\/?")
+	regStrFull := "\\* \\[[-_A-Za-z0-9\\/]+\\]\\(https:\\/\\/github\\.com\\/[-_A-Za-z0-9]+\\/[-_A-Za-z0-9]+\\/?\\)"
+	regLink := regexp.MustCompile("https:\\/\\/github\\.com\\/([-_A-Za-z0-9]+\\/[-_A-Za-z0-9]+)\\/?")
 
 	total := 0
 	for i, line := range lines {
