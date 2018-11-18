@@ -34,15 +34,16 @@ func main() {
 	passB, _ := gopass.GetPasswdMasked()
 	pass := string(passB)
 
-	regStrFull := "\\* \\[\\w+\\]\\(https:\\/\\/github\\.com\\/[-_A-Za-z]+\\/[-_A-Za-z]+\\/?\\)"
+	regStrFull := "\\* \\[[-_A-Za-z0-9\\/]+\\]\\(https:\\/\\/github\\.com\\/[-_A-Za-z]+\\/[-_A-Za-z]+\\/?\\)"
 	regLink := regexp.MustCompile("https:\\/\\/github\\.com\\/([-_A-Za-z]+\\/[-_A-Za-z]+)\\/?")
 
+	total := 0
 	for i, line := range lines {
 		match, _ := regexp.MatchString(regStrFull, line)
 		if match {
+			total = total + 1
 			repo := regLink.FindStringSubmatch(line)
-			getStarsAndWriteRes(repo[1], lines, i, username, pass)
-			// time.Sleep(500 * time.Millisecond)
+			getStarsAndWriteRes(repo[1], lines, i, username, pass, total)
 		}
 	}
 
@@ -50,7 +51,7 @@ func main() {
 	writeLines(lines, output)
 }
 
-func getStarsAndWriteRes(repo string, lines []string, i int, username, pass string) {
+func getStarsAndWriteRes(repo string, lines []string, i int, username, pass string, total int) {
 	var client http.Client
 	apiUrl := "https://api.github.com/repos/"
 	url := apiUrl + repo
@@ -75,7 +76,7 @@ func getStarsAndWriteRes(repo string, lines []string, i int, username, pass stri
 	json.Unmarshal(bodyBytes, &ghRepo)
 
 	lines[i] = fmt.Sprintf("%s **⭐%d**", lines[i], ghRepo.Stars)
-	fmt.Println(lines[i])
+	fmt.Println(total, lines[i])
 }
 
 // readLines reads a whole file into memory
